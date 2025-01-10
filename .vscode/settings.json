@@ -1,0 +1,11 @@
+{
+    "clang-format.fallbackStyle": "Google",
+    "clang-format.language.cpp.enable": true,
+    "clang-format.language.c.enable": true,
+    "clang-format.assumeFilename": "${workspaceFolder/.clang-format}",
+    "editor.formatOnSave": true,
+    "clangd.arguments": [
+        "--compile-commands-dir=build\\Debug" //配置clangd识别compelie_commands.json的路径
+    ],
+    "clangd.path": "D:\\99_SoftPacckag\\clangd-windows-17.0.3\\clangd_17.0.3\\bin\\clangd.exe",
+}
