@@ -151,3 +151,7 @@ if (CMAKE_CROSSCOMPILING)
   #RVDS_ARM_CM7 GCC_ARM_CM7
   set( FREERTOS_PORT "GCC_ARM_CM7" CACHE STRING "" FORCE)  
 endif()
+
+# 需要将处理器信息传递到freertos_config中
+target_compile_options(freertos_config INTERFACE ${cpu_PARAMS} )
+
