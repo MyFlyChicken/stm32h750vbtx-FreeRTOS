@@ -95,6 +95,22 @@
             "group": "build",
             "problemMatcher": [],
             "detail": "CMake template build task"
+        },
+        {
+            "type": "shell",
+            "label": "OpenOCD download",
+            "command": "openocd",
+            "args": [
+                "-f",
+                "cmsis-dap.cfg",
+                "-f",
+                "stm32h7x.cfg",
+                "-c",
+                "program",
+                "${command:cmake.launchTargetPath}",
+                "verify reset exit",
+            ]
+            //"group": "build"
         }
     ]
 }

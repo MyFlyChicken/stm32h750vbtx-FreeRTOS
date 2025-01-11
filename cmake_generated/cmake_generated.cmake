@@ -83,8 +83,8 @@ set(sources_SRCS ${sources_SRCS}
 # Include directories
 set(include_c_DIRS ${include_c_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}/applications
-	${CMAKE_CURRENT_SOURCE_DIR}/bsp/inc
 	${CMAKE_CURRENT_SOURCE_DIR}/bsp	
+	${CMAKE_CURRENT_SOURCE_DIR}/bsp/inc
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/STM32H7xx_HAL_Driver/Inc
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/CMSIS/Include
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/CMSIS/Device/ST/STM32H7xx/Include	
