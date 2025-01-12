@@ -29,10 +29,10 @@
 /*
 	定义用于硬件定时器的TIM， 可以使 TIM2 - TIM5
 */
-#define USE_TIM2
+//#define USE_TIM2
 //#define USE_TIM3
 //#define USE_TIM4
-//#define USE_TIM5
+// #define USE_TIM5
 
 #ifdef USE_TIM2
 	#define TIM_HARD					TIM2
@@ -124,7 +124,7 @@ void bsp_InitTimer(void)
 	
 	g_ucEnableSystickISR = 1;		/* 1表示执行systick中断 */
 	
-	bsp_InitHardTimer();
+	// bsp_InitHardTimer();
 }
 
 /*
@@ -458,17 +458,17 @@ int32_t bsp_CheckRunTime(int32_t _LastTime)
 *	返 回 值: 无
 *********************************************************************************************************
 */
-void SysTick_Handler(void)
-{
-	HAL_IncTick();	/* ST HAL库的滴答定时中断服务程序 */
+// void SysTick_Handler(void)
+// {
+// 	HAL_IncTick();	/* ST HAL库的滴答定时中断服务程序 */
 	
-	if (g_ucEnableSystickISR == 0)
-	{
-		return;
-	}
+// 	if (g_ucEnableSystickISR == 0)
+// 	{
+// 		return;
+// 	}
 	
-	SysTick_ISR();	/* 安富莱bsp库的滴答定时中断服务程序 */
-}
+// 	SysTick_ISR();	/* 安富莱bsp库的滴答定时中断服务程序 */
+// }
 
 /*
 *********************************************************************************************************
@@ -641,6 +641,7 @@ void bsp_StartHardTimer(uint8_t _CC, uint32_t _uiTimeOut, void * _pCallBack)
 */
 void TIM_HARD_IRQHandler(void)
 {
+	//HAL_IncTick();
 	uint16_t itstatus = 0x0, itenable = 0x0;
 	TIM_TypeDef* TIMx = TIM_HARD;
 	

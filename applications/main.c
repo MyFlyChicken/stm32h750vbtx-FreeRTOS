@@ -46,37 +46,57 @@ uint8_t buffer[10] = {"Hello\r\n"};
 *	返 回 值: 错误代码(无需处理)
 *********************************************************************************************************
 */
-int main(void)
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "timers.h"
+#include "semphr.h"
+static void exampleTask( void * parameters ) __attribute__( ( noreturn ) );
+
+/*-----------------------------------------------------------*/
+
+static void exampleTask( void * parameters )
 {
-    bsp_Init(); /* 硬件初始化 */
-
-    PrintfLogo(); /* 打印例程名称和版本等信息 */
+    /* Unused parameters. */
+    ( void ) parameters;
+    // PrintfLogo(); /* 打印例程名称和版本等信息 */
     PrintfHelp(); /* 打印操作提示 */
-
-    /* 先做个LED1的亮灭显示 */
-    bsp_LedOn(1);
-    bsp_DelayMS(100);
-    bsp_LedOff(1);
-    bsp_DelayMS(100);
-
-    bsp_StartAutoTimer(0, 100); /* 启动1个100ms的自动重装的定时器 */
-    bsp_StartAutoTimer(1, 500); /* 启动1个500ms的自动重装的定时器 */
-
-    /* 进入主程序循环体 */
-    while (1) {
-        bsp_Idle(); /* 这个函数在bsp.c文件。用户可以修改这个函数实现CPU休眠和喂狗 */
-
-        /* 判断定时器超时时间 */
-        if (bsp_CheckTimer(0)) {
-            /* 每隔100ms 进来一次 */
-            bsp_LedToggle(1);
-        }
-        if (bsp_CheckTimer(1)) {
-            //comSendBuf(COM1, buffer, strlen((const char*)buffer));
-            printf("hello12\r\n");
-        }
+    for( ; ; )
+    {
+        /* Example Task Code */
+        bsp_LedToggle(1);
+        printf("hello freertos\r\n");
+        vTaskDelay( 1000 ); /* delay 100 ticks */
     }
 }
+/*-----------------------------------------------------------*/
+TaskHandle_t task1;
+int main( void )
+{
+    static StaticTask_t exampleTaskTCB;
+    static StackType_t exampleTaskStack[ configMINIMAL_STACK_SIZE ];
+
+    bsp_Init(); /* 硬件初始化 */
+
+    ( void ) xTaskCreate( exampleTask,
+                                "example",
+                                configMINIMAL_STACK_SIZE,
+                                NULL,
+                                configMAX_PRIORITIES - 1U,
+                                NULL );
+
+    /* Start the scheduler. */
+    vTaskStartScheduler();
+
+    for( ; ; )
+    {
+        /* Should not reach here. */
+    }
+
+    return 0;
+}
+
 
 /*
 *********************************************************************************************************

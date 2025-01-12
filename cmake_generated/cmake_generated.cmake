@@ -27,6 +27,7 @@ set(sources_SRCS ${sources_SRCS}
 	${CMAKE_CURRENT_SOURCE_DIR}/bsp/src/bsp_led.c
 	${CMAKE_CURRENT_SOURCE_DIR}/bsp/src/bsp_timer.c
 	${CMAKE_CURRENT_SOURCE_DIR}/bsp/src/bsp_uart_fifo.c	
+	${CMAKE_CURRENT_SOURCE_DIR}/bsp/stm32h7xx_hal_timebase_tim_template.c
 	#${CMAKE_CURRENT_SOURCE_DIR}/applications/usb_init.c
 	#${CMAKE_CURRENT_SOURCE_DIR}/Thrid_Party/CherryUSB-latest/osal/usb_osal_rtthread.c
 	#${CMAKE_CURRENT_SOURCE_DIR}/Thrid_Party/CherryUSB-latest/port/dwc2/usb_glue_st.c
@@ -88,6 +89,8 @@ set(include_c_DIRS ${include_c_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/STM32H7xx_HAL_Driver/Inc
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/CMSIS/Include
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/CMSIS/Device/ST/STM32H7xx/Include	
+	${CMAKE_CURRENT_SOURCE_DIR}/Third_Party/FreeRTOS-Kernel/include
+	${CMAKE_CURRENT_SOURCE_DIR}/Third_Party/FreeRTOS-Kernel/portable/GCC/ARM_CM7/r0p1
 	#${CMAKE_CURRENT_SOURCE_DIR}/libraries/HAL_Drivers/drv_flash	
 )
 set(include_cxx_DIRS ${include_cxx_DIRS})
@@ -106,27 +109,12 @@ set(symbols_asm_SYMB ${symbols_asm_SYMB}
     "DEBUG"
 )
 
-# Link directories
-set(link_DIRS ${link_DIRS}{{sr:link_DIRS}})
-
-# Link libraries
-set(link_LIBS ${link_LIBS}
-    c
-    m
-)
-
-# Compiler options
-set(compiler_OPTS ${compiler_OPTS})
-
-# Linker options
-set(linker_OPTS ${linker_OPTS})
-
-#定义一个接口库 freertos_config
+# 定义一个接口库 freertos_config
 add_library(freertos_config INTERFACE)
 
 target_include_directories(freertos_config SYSTEM
 INTERFACE
-    #include
+	# FreeRTOSConfig路径
 	${CMAKE_CURRENT_SOURCE_DIR}/applications
 )
 
@@ -155,3 +143,18 @@ endif()
 # 需要将处理器信息传递到freertos_config中
 target_compile_options(freertos_config INTERFACE ${cpu_PARAMS} )
 
+# Link directories
+set(link_DIRS ${link_DIRS}{{sr:link_DIRS}})
+
+# Link libraries
+set(link_LIBS ${link_LIBS}
+    c
+    m
+	${CMAKE_CURRENT_SOURCE_DIR}/build/Debug/Third_Party/FreeRTOS-Kernel/libfreertos_kernel.a
+)
+
+# Compiler options
+set(compiler_OPTS ${compiler_OPTS})
+
+# Linker options
+set(linker_OPTS ${linker_OPTS})

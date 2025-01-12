@@ -91,6 +91,7 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
 )
 
 # Add linked libraries
+message(>>> ${CMAKE_PROJECT_NAME} >>> ${link_LIBS})
 target_link_libraries(${CMAKE_PROJECT_NAME} ${link_LIBS})
 
 # Compiler options
