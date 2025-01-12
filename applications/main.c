@@ -52,7 +52,7 @@ int main(void)
 
     PrintfLogo(); /* 打印例程名称和版本等信息 */
     PrintfHelp(); /* 打印操作提示 */
-
+git 
     /* 先做个LED1的亮灭显示 */
     bsp_LedOn(1);
     bsp_DelayMS(100);

@@ -6,6 +6,38 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Win Debug with pyocd",
+            "cwd": "${workspaceRoot}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "targetId": "STM32H750VBTx",
+            "servertype": "pyocd",
+            "serverpath": "C:/Users/yyf/AppData/Local/Programs/Python/Python312/Scripts/pyocd.exe",
+            "armToolchainPath": "C:/Program Files/arm-gnu-toolchain-13.2.Rel1-mingw-w64-i686-arm-none-eabi/bin",
+            "svdFile": "${workspaceFolder}/STM32H750.svd",
+            "showDevDebugOutput": "both",
+        },
+        {
+            "cwd": "${workspaceRoot}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "name": "Win Debug with OpenOCD",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            // 需要根据实际情况指定编译器路径
+            "armToolchainPath": "C:/Program Files/arm-gnu-toolchain-13.2.Rel1-mingw-w64-i686-arm-none-eabi/bin",
+            //openocd的配置路径
+            "configFiles": [
+                "cmsis-dap.cfg",
+                "stm32h7x.cfg"
+            ],
+            "searchDir": [],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "both"
+        },
+        {
             "name": "Linux Debug with OpenOCD",
             "cwd": "${workspaceRoot}",
             "executable": "${command:cmake.launchTargetPath}",
@@ -15,8 +47,8 @@
             "armToolchainPath": "/usr/bin",
             "interface": "swd",
             "configFiles": [
-                "/usr/share/openocd/scripts/interface/cmsis-dap.cfg",
-                "/usr/share/openocd/scripts/target/stm32h7x.cfg"
+                "cmsis-dap.cfg",
+                "stm32h7x.cfg"
             ],
             "searchDir": [],
             "runToEntryPoint": "main",

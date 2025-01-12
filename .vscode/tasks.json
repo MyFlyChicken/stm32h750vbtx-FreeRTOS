@@ -98,7 +98,7 @@
         },
         {
             "type": "shell",
-            "label": "OpenOCD download",
+            "label": "OpenOCD download with cmsis-dap",
             "command": "openocd",
             "args": [
                 "-f",
@@ -106,11 +106,31 @@
                 "-f",
                 "stm32h7x.cfg",
                 "-c",
-                "program",
-                "${command:cmake.launchTargetPath}",
-                "verify reset exit",
-            ]
-            //"group": "build"
-        }
+                "adapter speed 4000",
+                "-c",
+                "program ./build/Debug/stm32h750-freertos.hex reset exit"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "pyocd Download with cmsim-dap",
+            "command": "pyocd",
+            "args": [
+                "flash",
+                "--target=STM32H750VBTx",
+                "--erase=auto",
+                "--frequency=1000000",
+                "-a=0x08000000",
+                "./build/Debug/stm32h750-freertos.bin",
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build"
+        },
     ]
 }
