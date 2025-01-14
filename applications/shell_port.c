@@ -10,6 +10,8 @@
  */
 #include "shell_port.h"
 #include "FreeRTOS.h"
+#include "bsp_uart_fifo.h"
+#include "projdefs.h"
 #include "task.h"
 #include "semphr.h"
 #include "bsp.h"
@@ -20,7 +22,7 @@ Shell shell;
 char  shellBuffer[512];
 
 static SemaphoreHandle_t shellMutex;
-
+static SemaphoreHandle_t RcvbinSemaphore;
 /**
  * @brief 用户shell写
  * 
@@ -48,14 +50,18 @@ short userShellRead(char* data, unsigned short len)
     uint16_t i = 0;
     uint8_t* p = (uint8_t*)data;
 
-    for (; i < len; i++) {
-        if (!comGetChar(COM1, (uint8_t*)p)) {
-            break;
-        };
-        p++;
+    if (xSemaphoreTake(RcvbinSemaphore, portMAX_DELAY) == pdTRUE) {
+        for (; i < len; i++) {
+            if (!comGetChar(COM1, (uint8_t*)p)) {
+
+                break;
+            };
+            p++;
+        }
+        return i;
     }
 
-    return i;
+    return 0;
 }
 
 /**
@@ -84,6 +90,16 @@ int userShellUnlock(Shell* shell)
     return 0;
 }
 
+void userShellRcvCallback(uint8_t _byte)
+{
+    (void)_byte;
+
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+    xSemaphoreGiveFromISR(RcvbinSemaphore, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
 /**
  * @brief 用户shell初始化
  * 
@@ -91,6 +107,10 @@ int userShellUnlock(Shell* shell)
 void userShellInit(void)
 {
     shellMutex = xSemaphoreCreateMutex();
+
+    RcvbinSemaphore = xSemaphoreCreateBinary();
+
+    commSetRcvCbk(COM1, userShellRcvCallback);
 
     shell.write  = userShellWrite;
     shell.read   = userShellRead;

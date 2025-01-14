@@ -25,6 +25,7 @@
 
 #include "bsp.h"
 #include "stm32h7xx_hal_uart.h"
+#include <stdint.h>
 
 /* 串口1的GPIO  PA9, PA10   RS323 DB9接口 */
 #define USART1_CLK_ENABLE() __HAL_RCC_USART1_CLK_ENABLE()
@@ -479,6 +480,77 @@ void comSetBaud(COM_PORT_E _ucPort, uint32_t _BaudRate)
     bsp_SetUartParam(USARTx, _BaudRate, UART_PARITY_NONE, UART_MODE_TX_RX);
 }
 
+/*
+*********************************************************************************************************
+*	函 数 名: commSetRcvCbk
+*	功能说明: 设置串口接收到数据的回调函数
+*	形    参: _ucPort: 端口号(COM1 - COM8)
+*			  ReciveNew: 回调函数
+*	返 回 值: 0 设置成功 1设置失败
+*********************************************************************************************************
+*/
+uint8_t commSetRcvCbk(COM_PORT_E _ucPort, void (*ReciveNew)(uint8_t))
+{
+    if (_ucPort == COM1) {
+#if UART1_FIFO_EN == 1
+        g_tUart1.ReciveNew = ReciveNew;
+#else
+        return 1;
+#endif
+    }
+    else if (_ucPort == COM2) {
+#if UART2_FIFO_EN == 1
+        g_tUart2.ReciveNew = ReciveNew;
+#else
+        return 1;
+#endif
+    }
+    else if (_ucPort == COM3) {
+#if UART3_FIFO_EN == 1
+        g_tUart3.ReciveNew = ReciveNew;
+#else
+        return 1;
+#endif
+    }
+    else if (_ucPort == COM4) {
+#if UART4_FIFO_EN == 1
+        g_tUart4.ReciveNew = ReciveNew;
+#else
+        return 1;
+#endif
+    }
+    else if (_ucPort == COM5) {
+#if UART5_FIFO_EN == 1
+        g_tUart5.ReciveNew = ReciveNew;
+#else
+        return 1;
+#endif
+    }
+    else if (_ucPort == COM6) {
+#if UART6_FIFO_EN == 1
+        g_tUart6.ReciveNew = ReciveNew;
+#else
+        return 1;
+#endif
+    }
+    else if (_ucPort == COM7) {
+#if UART7_FIFO_EN == 1
+        g_tUart7.ReciveNew = ReciveNew;
+#else
+        return 1;
+#endif
+    }
+    else if (_ucPort == COM8) {
+#if UART8_FIFO_EN == 1
+        g_tUart8.ReciveNew = ReciveNew;
+#else
+        return 1;
+#endif
+    }
+
+    return 0;
+}
+
 /* 如果是RS485通信，请按如下格式编写函数， 我们仅举了 USART3作为RS485的例子 */
 
 /*
@@ -828,7 +900,7 @@ static void InitHardUart(void)
     HAL_GPIO_Init(USART1_RX_GPIO_PORT, &GPIO_InitStruct);
 
     /* 配置NVIC the NVIC for UART */
-    HAL_NVIC_SetPriority(USART1_IRQn, 0, 1);
+    HAL_NVIC_SetPriority(USART1_IRQn, 7, 1);
     HAL_NVIC_EnableIRQ(USART1_IRQn);
 
     /* 配置波特率、奇偶校验 */

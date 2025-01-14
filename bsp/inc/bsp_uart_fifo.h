@@ -148,6 +148,7 @@ void    comSendBuf(COM_PORT_E _ucPort, uint8_t* _ucaBuf, uint16_t _usLen);
 void    comClearTxFifo(COM_PORT_E _ucPort);
 void    comClearRxFifo(COM_PORT_E _ucPort);
 void    comSetBaud(COM_PORT_E _ucPort, uint32_t _BaudRate);
+uint8_t commSetRcvCbk(COM_PORT_E _ucPort, void (*ReciveNew)(uint8_t));
 
 void USART_SetBaudRate(USART_TypeDef* USARTx, uint32_t BaudRate);
 void bsp_SetUartParam(USART_TypeDef* Instance, uint32_t BaudRate, uint32_t Parity, uint32_t Mode);
