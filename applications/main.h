@@ -5,29 +5,20 @@
 extern "C" {
 #endif
 
-#include "bsp.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "queue.h"
+#include "timers.h"
+#include "semphr.h"
 
+#include "bsp.h" /* 底层硬件驱动 */
+#include "shell_port.h"
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#include <stdint.h>
+#include <string.h>
 
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif

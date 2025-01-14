@@ -146,6 +146,15 @@ SECTIONS
     . = ALIGN(4);
   } >FLASH
 
+  .shellCommand :
+  {
+    . = ALIGN(4);
+    _shell_command_start = .;
+    KEEP (*(shellCommand))
+    _shell_command_end = .;
+    . = ALIGN(4);
+  } >FLASH
+
   /* Used by the startup to initialize data */
   _sidata = LOADADDR(.data);
 

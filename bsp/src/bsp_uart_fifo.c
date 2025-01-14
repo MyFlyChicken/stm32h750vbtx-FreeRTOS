@@ -179,6 +179,8 @@ static uint8_t g_TxBuf8[UART8_TX_BUF_SIZE]; /* 发送缓冲区 */
 static uint8_t g_RxBuf8[UART8_RX_BUF_SIZE]; /* 接收缓冲区 */
 #endif
 
+#define PRINTF_UART USART3
+
 static void UartVarInit(void);
 
 static void    InitHardUart(void);
@@ -1377,11 +1379,11 @@ int fputc(int ch, FILE* f)
 
     return ch;
 #else /* 采用阻塞方式发送每个字符,等待数据发送完毕 */
-    /* 写一个字节到USART1 */
-    USART1->TDR = ch;
+    /* 写一个字节到PRINTF_UART */
+    PRINTF_UART->TDR = ch;
 
     /* 等待发送结束 */
-    while ((USART1->ISR & USART_ISR_TC) == 0) {}
+    while ((PRINTF_UART->ISR & USART_ISR_TC) == 0) {}
 
     return ch;
 #endif
@@ -1400,15 +1402,15 @@ int fgetc(FILE* f)
 #if 1 /* 从串口接收FIFO中取1个数据, 只有取到数据才返回 */
     uint8_t ucData;
 
-    while (comGetChar(COM1, &ucData) == 0)
+    while (comGetChar(COM3, &ucData) == 0)
         ;
 
     return ucData;
 #else
     /* 等待接收到数据 */
-    while ((USART1->ISR & UART_FLAG_RXNE) == 0) {}
+    while ((PRINTF_UART->ISR & UART_FLAG_RXNE) == 0) {}
 
-    return (int)USART1->RDR;
+    return (int)PRINTF_UART->RDR;
 #endif
 }
 #elif defined(__GNUC__)
@@ -1422,11 +1424,11 @@ int _write(int fd, char* pBuffer, int size)
     int back = size;
     int i    = 0;
     while (back) {
-        /* 写一个字节到USART1 */
-        USART1->TDR = pBuffer[i];
+        /* 写一个字节到PRINTF_UART */
+        PRINTF_UART->TDR = pBuffer[i];
 
         /* 等待发送结束 */
-        while ((USART1->ISR & USART_ISR_TC) == 0) {};
+        while ((PRINTF_UART->ISR & USART_ISR_TC) == 0) {};
         i++;
         back--;
     }

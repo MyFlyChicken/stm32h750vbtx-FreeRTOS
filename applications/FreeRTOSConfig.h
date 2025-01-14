@@ -51,9 +51,9 @@ extern uint32_t SystemCoreClock;
 #define configUSE_TICK_HOOK            0
 #define configCPU_CLOCK_HZ             (SystemCoreClock)
 #define configTICK_RATE_HZ             ((TickType_t)1000)
-#define configMAX_PRIORITIES           (8)
+#define configMAX_PRIORITIES           (32)
 #define configMINIMAL_STACK_SIZE       ((uint16_t)128)
-#define configTOTAL_HEAP_SIZE          ((size_t)(2 * 1024))
+#define configTOTAL_HEAP_SIZE          ((size_t)(20 * 1024))
 #define configMAX_TASK_NAME_LEN        (16)
 #define configUSE_TRACE_FACILITY       0
 #define configUSE_16_BIT_TICKS         0
@@ -133,6 +133,6 @@ standard names. */
 
 /* IMPORTANT: This define MUST be commented when used with STM32Cube firmware, 
               to prevent overwriting SysTick_Handler defined within STM32Cube HAL */
-#define xPortSysTickHandler SysTick_Handler 
+#define xPortSysTickHandler SysTick_Handler
 
 #endif /* FREERTOS_CONFIG_H */

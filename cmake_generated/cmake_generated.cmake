@@ -21,6 +21,7 @@ set(linker_script_SRC ${linker_script_SRC} ${CMAKE_CURRENT_SOURCE_DIR}/linker_sc
 set(sources_SRCS ${sources_SRCS}
 	${CMAKE_CURRENT_SOURCE_DIR}/Startup/startup_stm32h750vbtx.s
     ${CMAKE_CURRENT_SOURCE_DIR}/applications/main.c
+	${CMAKE_CURRENT_SOURCE_DIR}/applications/shell_port.c
 	${CMAKE_CURRENT_SOURCE_DIR}/bsp/bsp.c	
 	${CMAKE_CURRENT_SOURCE_DIR}/bsp/stm32h7xx_it.c
 	${CMAKE_CURRENT_SOURCE_DIR}/bsp/src/bsp_key.c
@@ -28,6 +29,8 @@ set(sources_SRCS ${sources_SRCS}
 	${CMAKE_CURRENT_SOURCE_DIR}/bsp/src/bsp_timer.c
 	${CMAKE_CURRENT_SOURCE_DIR}/bsp/src/bsp_uart_fifo.c	
 	${CMAKE_CURRENT_SOURCE_DIR}/bsp/stm32h7xx_hal_timebase_tim_template.c
+	
+	#USB
 	#${CMAKE_CURRENT_SOURCE_DIR}/applications/usb_init.c
 	#${CMAKE_CURRENT_SOURCE_DIR}/Thrid_Party/CherryUSB-latest/osal/usb_osal_rtthread.c
 	#${CMAKE_CURRENT_SOURCE_DIR}/Thrid_Party/CherryUSB-latest/port/dwc2/usb_glue_st.c
@@ -37,6 +40,12 @@ set(sources_SRCS ${sources_SRCS}
 	#${CMAKE_CURRENT_SOURCE_DIR}/Thrid_Party/CherryUSB-latest/core/usbd_core.c
 	#${CMAKE_CURRENT_SOURCE_DIR}/Thrid_Party/CherryUSB-latest/port/dwc2/usb_dc_dwc2.c	
 	
+	#letter-shell
+	${CMAKE_CURRENT_SOURCE_DIR}/Third_Party/letter-shell/src/shell_cmd_list.c
+	${CMAKE_CURRENT_SOURCE_DIR}/Third_Party/letter-shell/src/shell_companion.c
+	${CMAKE_CURRENT_SOURCE_DIR}/Third_Party/letter-shell/src/shell_ext.c
+	${CMAKE_CURRENT_SOURCE_DIR}/Third_Party/letter-shell/src/shell.c
+
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_spi.c
@@ -78,7 +87,7 @@ set(sources_SRCS ${sources_SRCS}
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sai.c
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/CMSIS/Device/ST/STM32H7xx/Source/Templates/system_stm32h7xx.c
-	
+		
 )
 
 # Include directories
@@ -91,7 +100,10 @@ set(include_c_DIRS ${include_c_DIRS}
 	${CMAKE_CURRENT_SOURCE_DIR}/libraries/CMSIS/Device/ST/STM32H7xx/Include	
 	${CMAKE_CURRENT_SOURCE_DIR}/Third_Party/FreeRTOS-Kernel/include
 	${CMAKE_CURRENT_SOURCE_DIR}/Third_Party/FreeRTOS-Kernel/portable/GCC/ARM_CM7/r0p1
-	#${CMAKE_CURRENT_SOURCE_DIR}/libraries/HAL_Drivers/drv_flash	
+	#${CMAKE_CURRENT_SOURCE_DIR}/libraries/HAL_Drivers/drv_flash
+	
+	#latter-shell
+	${CMAKE_CURRENT_SOURCE_DIR}/Third_Party/letter-shell/src
 )
 set(include_cxx_DIRS ${include_cxx_DIRS})
 set(include_asm_DIRS ${include_asm_DIRS})
@@ -102,7 +114,8 @@ set(include_asm_DIRS ${include_asm_DIRS})
 #"CONFIG_USB_DWC2_PORT=FS_PORT"
 set(symbols_c_SYMB ${symbols_c_SYMB}	
 	"STM32H750xx"
-	"USE_HAL_DRIVER"	
+	"USE_HAL_DRIVER"
+	SHELL_CFG_USER="shell_cfg_user.h"
 )
 set(symbols_cxx_SYMB ${symbols_cxx_SYMB})
 set(symbols_asm_SYMB ${symbols_asm_SYMB}
@@ -146,7 +159,7 @@ target_compile_options(freertos_config INTERFACE ${cpu_PARAMS} )
 # Link directories
 set(link_DIRS ${link_DIRS}{{sr:link_DIRS}})
 
-# Link libraries
+# Link libraries 链接库文件，同时库文件的头文件需要手动包含
 set(link_LIBS ${link_LIBS}
     c
     m
