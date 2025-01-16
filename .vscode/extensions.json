@@ -5,6 +5,9 @@
         "marus25.cortex-debug",
         "twxs.cmake",
         "dan-c-underwood.arm",
-        "zixuanwang.linkerscript"
+        "zixuanwang.linkerscript",
+        "ChirtleLovesDolls.nebula-theme",
+        "spmeesseman.vscode-taskexplorer",
+        "xaver.clang-format",
     ]
 }
