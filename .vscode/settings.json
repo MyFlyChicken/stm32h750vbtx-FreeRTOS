@@ -1,0 +1,11 @@
+{
+    "clang-format.fallbackStyle": "Google",
+    "clang-format.language.cpp.enable": true,
+    "clang-format.language.c.enable": true,
+    "clang-format.assumeFilename": "${workspaceFolder/.clang-format}",
+    "editor.formatOnSave": true,
+    "clangd.arguments": [
+        //"-ID:/99_SoftPacckag/arm-gnu-toolchain-13.2.rel1-mingw-w64-i686-arm-none-eabi/arm-gnu-toolchain-13.2.Rel1-mingw-w64-i686-arm-none-eabi/arm-none-eabi/include",
+        "--compile-commands-dir=build/Debug",
+    ],
+}

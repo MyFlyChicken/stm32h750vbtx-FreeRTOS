@@ -1,0 +1,83 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    ///usr/share/openocd/scripts/interface/cmsis-dap.cfg
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Win Debug with pyocd",
+            "cwd": "${workspaceRoot}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "targetId": "STM32H750VBTx",
+            "servertype": "pyocd",
+            "serverpath": "G:/Program Files/pyocd-windows-0.42.0/pyocd.exe",
+            "armToolchainPath": "G:/arm-none-eabi/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin",
+            "svdFile": "${workspaceFolder}/STM32H750.svd",
+            "showDevDebugOutput": "both",
+        },
+        {
+            "cwd": "${workspaceRoot}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "name": "Win Debug with OpenOCD",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            // 需要根据实际情况指定编译器路径
+            "armToolchainPath": "G:/arm-none-eabi/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin",
+            //openocd的配置路径
+            "configFiles": [
+                "cmsis-dap.cfg",
+                "stm32h7x.cfg"
+            ],
+            "searchDir": [],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "both"
+        },
+        {
+            "name": "Linux Debug with OpenOCD",
+            "cwd": "${workspaceRoot}",
+            "executable": "${command:cmake.launchTargetPath}",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "armToolchainPath": "G:/arm-none-eabi/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin",
+            "interface": "swd",
+            "configFiles": [
+                "cmsis-dap.cfg",
+                "stm32h7x.cfg"
+            ],
+            "searchDir": [],
+            "runToEntryPoint": "main",
+            "showDevDebugOutput": "both"
+        },
+        {
+            "name": "Win Debug Microcontroller - ST-Link",
+            "cwd": "${workspaceFolder}",
+            "type": "cortex-debug",
+            "executable": "${command:cmake.launchTargetPath}", //or fixed file path: build/stm32h735g-dk-led.elf
+            "request": "launch", //Use "attach" to connect to target w/o elf download
+            "servertype": "stlink",
+            "device": "STM32H750VBTx", //MCU used, ex. "STM32H735IG"
+            "interface": "swd",
+            "serialNumber": "", //Set ST-Link ID if you use multiple at the same time
+            "runToEntryPoint": "main",
+            "svdFile": "${workspaceFolder}/STM32H750x.svd", //Path to SVD file to see registers
+            "armToolchainPath": "G:/arm-none-eabi/arm-gnu-toolchain-15.2.rel1-mingw-w64-i686-arm-none-eabi/bin",
+            "serverpath": "D:\\RT-ThreadStudio\\RT-ThreadStudio\\repo\\Extract\\Debugger_Support_Packages\\STMicroelectronics\\ST-LINK_Debugger\\1.6.0\\ST-LINK_gdbserver.exe",
+            "stm32cubeprogrammer": "D:\\RT-ThreadStudio\\RT-ThreadStudio\\repo\\Extract\\Debugger_Support_Packages\\STMicroelectronics\\ST-LINK_Debugger\\1.6.0\\tools\\bin",
+            "v1": false,
+            "showDevDebugOutput": "both",
+            /* Will get automatically detected if STM32CubeIDE is installed to default directory
+               or it can be manually provided if necessary.. */
+            //"serverpath": "c:\\ST\\STM32CubeIDE_1.7.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.stlink-gdb-server.win32_2.0.100.202109301221\\tools\\bin\\ST-LINK_gdbserver.exe",
+            //"armToolchainPath": "c:\\ST\\STM32CubeIDE_1.7.0\\STM32CubeIDE\\plugins\\com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.9-2020-q2-update.win32_2.0.0.202105311346\\tools\\bin",
+            //"stm32cubeprogrammer": "c:\\Program Files\\STMicroelectronics\\STM32Cube\\STM32CubeProgrammer\\bin",
+            /* If you use external loader, add additional arguments */
+            //"serverArgs": ["--extload", "path/to/ext/loader.stldr"],
+        }
+    ]
+}

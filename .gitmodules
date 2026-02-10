@@ -1,0 +1,6 @@
+[submodule "Third_Party/FreeRTOS-Kernel"]
+	path = Third_Party/FreeRTOS-Kernel
+	url = git@github.com:FreeRTOS/FreeRTOS-Kernel.git
+[submodule "Third_Party/letter-shell"]
+	path = Third_Party/letter-shell
+	url = git@github.com:NevermindZZT/letter-shell.git
